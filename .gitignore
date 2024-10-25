@@ -25,3 +25,5 @@ go.work
 
 
 *data~
+!/data1
+!/data2
