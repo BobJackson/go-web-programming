@@ -23,4 +23,6 @@ go.work
 
 .idea
 
-*data~
+*data~!/data1
+
+!/data2
