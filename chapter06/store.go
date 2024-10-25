@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 type Post struct {
 	Id      int
@@ -18,6 +21,48 @@ func store(post Post) {
 
 func main() {
 
+	//storeInMemory()
+
+	storeToFile()
+}
+
+func storeToFile() {
+	data := []byte("Hello World!\n")
+	err := os.WriteFile("data1", data, 0644)
+	if err != nil {
+		panic(err)
+	}
+
+	read1, _ := os.ReadFile("data1")
+	fmt.Println(string(read1))
+
+	file1, _ := os.Create("data2")
+	defer func(file1 *os.File) {
+		err := file1.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(file1)
+
+	bytes, _ := file1.Write(data)
+	fmt.Printf("Wrote %d bytes to file\n", bytes)
+
+	file2, _ := os.Open("data2")
+	defer func(file2 *os.File) {
+		err := file2.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(file2)
+
+	read2 := make([]byte, len(data))
+	bytes, _ = file2.Read(read2)
+
+	fmt.Printf("Read %d bytes from file\n", bytes)
+	fmt.Println(string(read2))
+}
+
+func storeInMemory() {
 	PostById = make(map[int]*Post)
 	PostByAuthor = make(map[string][]*Post)
 
