@@ -1,0 +1,20 @@
+{
+  "id": 1,
+  "content": "Hello, world!",
+  "author": {
+    "id": 1,
+    "name": "John Doe"
+  },
+  "comments": [
+    {
+      "id": 1,
+      "author": "Jane Doe",
+      "content": "Have a great day!"
+    },
+    {
+      "id": 2,
+      "author": "John Smith",
+      "content": "How are you today?"
+    }
+  ]
+}
