@@ -28,21 +28,30 @@ func TestHandleGet(t *testing.T) {
 	}
 
 	// 发送请求并记录响应
-	mux.ServeHTTP(writer, request)
+	done := make(chan struct{})
+	go func() {
+		mux.ServeHTTP(writer, request)
+		close(done)
+	}()
 
-	// 检查响应状态码
-	if writer.Code != http.StatusOK {
-		t.Errorf("Expected status code %d, got %d", http.StatusOK, writer.Code)
-	}
+	select {
+	case <-done:
+		// 检查响应状态码
+		if writer.Code != http.StatusOK {
+			t.Errorf("Expected status code %d, got %d", http.StatusOK, writer.Code)
+		}
 
-	// 解析响应体为Post结构体
-	var post Post
-	if err := json.Unmarshal(writer.Body.Bytes(), &post); err != nil {
-		t.Errorf("Failed to unmarshal response body: %v", err)
-	}
+		// 解析响应体为Post结构体
+		var post Post
+		if err := json.Unmarshal(writer.Body.Bytes(), &post); err != nil {
+			t.Errorf("Failed to unmarshal response body: %v", err)
+		}
 
-	// 检查Post ID
-	if post.Id != 1 {
-		t.Errorf("Expected post ID %d, got %d", 1, post.Id)
+		// 检查Post ID
+		if post.Id != 1 {
+			t.Errorf("Expected post ID %d, got %d", 1, post.Id)
+		}
+	case <-ctx.Done():
+		t.Errorf("Request timed out: %v", ctx.Err())
 	}
 }
