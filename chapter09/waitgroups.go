@@ -82,10 +82,7 @@ func callerB(c chan string) {
 	c <- "Hola Mundo!"
 }
 
-func main() {
-	//usingWaitGroup()
-	//usingChannel()
-	//usingBufferedChannel()
+func usingSelectKeyWord() {
 	a, b := make(chan string), make(chan string)
 	go callerA(a)
 	go callerB(b)
@@ -100,4 +97,11 @@ func main() {
 			fmt.Println("Default")
 		}
 	}
+}
+
+func main() {
+	//usingWaitGroup()
+	//usingChannel()
+	//usingBufferedChannel()
+	usingSelectKeyWord()
 }
