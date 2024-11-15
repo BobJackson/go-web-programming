@@ -50,7 +50,3 @@ func goPrint2() {
 	go printNumbers2()
 	go printLetters2()
 }
-
-func main() {
-
-}
