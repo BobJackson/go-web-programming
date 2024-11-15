@@ -38,11 +38,6 @@ func printLetters4(w chan bool) {
 	w <- true
 }
 
-func main() {
-	//usingWaitGroup()
-	usingChannel()
-}
-
 func usingWaitGroup() {
 	var wg sync.WaitGroup
 	wg.Add(2)
@@ -57,4 +52,27 @@ func usingChannel() {
 	go printLetters4(w2)
 	<-w1
 	<-w2
+}
+
+func thrower(c chan int) {
+	for i := 0; i < 5; i++ {
+		c <- i
+		fmt.Println("Threw  >>", i)
+	}
+}
+func catcher(c chan int) {
+	for i := 0; i < 5; i++ {
+		num := <-c
+		fmt.Println("Caught <<", num)
+	}
+}
+
+func main() {
+	//usingWaitGroup()
+	//usingChannel()
+
+	c := make(chan int)
+	go thrower(c)
+	go catcher(c)
+	time.Sleep(100 * time.Microsecond)
 }
