@@ -1,0 +1,14 @@
+Story: Get a post
+In order to display a post to the user
+As a calling program
+I want to get a post
+
+Scenario 1: using an id
+Given a post id 1
+When I send a GET request with the id
+Then I should get a post
+
+Scenario 2: using a non-integer id
+Given a post id "hello"
+When I send a GET request with the id
+Then I should get a HTTP 500 response
