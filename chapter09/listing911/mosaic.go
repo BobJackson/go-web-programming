@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"image"
 	"image/color"
+	"log"
 	"math"
 	"os"
 	"sync"
@@ -51,7 +51,7 @@ func cloneTilesDB() DB {
 
 func tilesDB() map[string][3]float64 {
 	start := time.Now()
-	fmt.Println("Start populating tiles db ...")
+	log.Println("Start populating tiles db ...")
 	db := make(map[string][3]float64)
 	files, _ := os.ReadDir(currentPath + "/tiles")
 	for _, f := range files {
@@ -62,15 +62,15 @@ func tilesDB() map[string][3]float64 {
 			if err == nil {
 				db[name] = averageColor(img)
 			} else {
-				fmt.Println("error in populating TILEDB:", err, name)
+				log.Println("error in populating TILEDB:", err, name)
 			}
 		} else {
-			fmt.Println("cannot open file", name, err)
+			log.Println("cannot open file", name, err)
 		}
 		_ = file.Close()
 	}
-	fmt.Println("Finished populating tiles db.")
-	fmt.Println("Elapsed time:", time.Since(start))
+	log.Println("Finished populating tiles db.")
+	log.Println("Elapsed time:", time.Since(start))
 	return db
 }
 

@@ -8,6 +8,7 @@ import (
 	"image"
 	"image/draw"
 	"image/jpeg"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -30,7 +31,7 @@ func main() {
 	}
 
 	TILESDB = tilesDB()
-	fmt.Println("Mosaic server started.")
+	log.Println("Mosaic server started.")
 	_ = server.ListenAndServe()
 }
 
@@ -92,13 +93,13 @@ func cut(original image.Image, db *DB, tileSize, x1, y1, x2, y2 int) <-chan imag
 				nearest := db.nearest(color)
 				file, err := os.Open(currentPath + "/" + nearest)
 				if err != nil {
-					println("Open error: ", err)
+					log.Printf("Open error: %v", err)
 					continue
 				}
 				img, _, err := image.Decode(file)
 				_ = file.Close()
 				if err != nil {
-					println("Decode error: ", err)
+					log.Printf("Decode error: %v", err)
 					continue
 				}
 				t := resize(img, tileSize)
