@@ -6,6 +6,7 @@ import (
 	"image/color"
 	"math"
 	"os"
+	"time"
 )
 
 func resize(in image.Image, newWidth int) image.NRGBA {
@@ -45,6 +46,7 @@ func cloneTilesDB() map[string][3]float64 {
 }
 
 func tilesDB() map[string][3]float64 {
+	start := time.Now()
 	fmt.Println("Start populating tiles db ...")
 	db := make(map[string][3]float64)
 	files, _ := os.ReadDir(currentPath + "/tiles")
@@ -64,6 +66,7 @@ func tilesDB() map[string][3]float64 {
 		_ = file.Close()
 	}
 	fmt.Println("Finished populating tiles db.")
+	fmt.Println("Elapsed time:", time.Since(start))
 	return db
 }
 
