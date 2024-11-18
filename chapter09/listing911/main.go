@@ -91,20 +91,20 @@ func cut(original image.Image, db *DB, tileSize, x1, y1, x2, y2 int) <-chan imag
 				color := [3]float64{float64(r), float64(g), float64(b)}
 				nearest := db.nearest(color)
 				file, err := os.Open(currentPath + "/" + nearest)
-				if err == nil {
-					img, _, err := image.Decode(file)
-					if err == nil {
-						t := resize(img, tileSize)
-						tile := t.SubImage(t.Bounds())
-						tileBounds := image.Rect(x, y, x+tileSize, y+tileSize)
-						draw.Draw(newImage, tileBounds, tile, sp, draw.Src)
-					} else {
-						println("Decode error: ", err)
-					}
-				} else {
+				if err != nil {
 					println("Open error: ", err)
+					continue
 				}
+				img, _, err := image.Decode(file)
 				_ = file.Close()
+				if err != nil {
+					println("Decode error: ", err)
+					continue
+				}
+				t := resize(img, tileSize)
+				tile := t.SubImage(t.Bounds())
+				tileBounds := image.Rect(x, y, x+tileSize, y+tileSize)
+				draw.Draw(newImage, tileBounds, tile, sp, draw.Src)
 			}
 			c <- newImage.SubImage(newImage.Rect)
 		}
